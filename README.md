@@ -28,14 +28,8 @@
 ### 4. 键盘布局与指法指南
 ![键盘与指法](screenshots/keyboard-guide.png)  
 （说明：颜色标注手指分工，新手快速熟悉键位，助力盲打入门）
-
-> 提示：所有图片均存储在仓库的`screenshots`文件夹中，直接在README渲染，无需点击链接。
-
 ## 🚀 快速开始
 ### 1. 克隆仓库
 ```bash
 # 克隆项目到本地
 git clone https://github.com/daodiaoren-tlh/-.git
-
-# 进入项目目录
-cd -
