@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>打字能力训练系统</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="data.js"></script>
+</head>
+<body>
+    <header>
+        <div class="container header-content">
+            <h1>打字能力训练系统</h1>
+            <div class="header-controls">
+                <div class="font-size-control">
+                    <button class="font-size-btn" id="decrease-font">-</button>
+                    <span>字体大小</span>
+                    <button class="font-size-btn" id="increase-font">+</button>
+                </div>
+                <div class="audio-toggle">
+                    <input type="checkbox" id="audio-enabled" checked>
+                    <label for="audio-enabled">音效</label>
+                </div>
+                <button class="theme-toggle" id="theme-toggle">🌓</button>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <section class="settings-panel">
+            <div class="settings-grid">
+                <div class="setting-group">
+                    <label for="word-count-select">词数</label>
+                    <select id="word-count-select">
+                        <option value="10">10个</option>
+                        <option value="20">20个</option>
+                        <option value="25">25个</option>
+                        <option value="30">30个</option>
+                    </select>
+                </div>
+                <div class="setting-group">
+                    <label for="mode-select">练习模式</label>
+                    <select id="mode-select">
+                        <option value="basic">基础模式</option>
+                        <option value="timed">计时模式</option>
+                        <option value="custom">自定义模式</option>
+                    </select>
+                </div>
+                <div class="setting-group">
+                    <label for="difficulty-select">难度</label>
+                    <select id="difficulty-select">
+                        <option value="easy">初级 (全小写)</option>
+                        <option value="medium">中级 (大小写+数字)</option>
+                        <option value="hard">高级 (含标点和特殊字符)</option>
+                    </select>
+                </div>
+                <div class="setting-group" id="time-setting">
+                    <label for="time-select">时长</label>
+                    <select id="time-select">
+                        <option value="60">60秒</option>
+                        <option value="120">120秒</option>
+                    </select>
+                </div>
+                <div class="custom-text-input hidden" id="custom-text-container">
+                    <label for="custom-text">自定义文本</label>
+                    <textarea id="custom-text" placeholder="请输入要练习的文本..."></textarea>
+                </div>
+            </div>
+            <div class="button-group">
+                <button class="start-btn" id="start-btn">开始练习</button>
+                <button class="reset-btn" id="reset-btn">重置</button>
+            </div>
+        </section>
+
+        <div id="keyboard-focus"></div>
+
+        <section class="practice-area" id="practice-area">
+            <div class="text-display" id="text-display">
+                <p class="placeholder">点击开始按钮开始练习</p>
+            </div>
+        </section>
+
+        <!-- 错误字符统计面板 -->
+        <section class="error-stats-panel hidden" id="error-stats-panel">
+            <h2>错误字符分析</h2>
+            <div id="error-chars-list"></div>
+        </section>
+
+        <section class="progress-container hidden" id="progress-container">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill"></div>
+            </div>
+            <div class="timer-display" id="timer-display">01:00</div>
+        </section>
+
+        <!-- 键盘布局显示区域 -->
+        <section id="keyboard-layout-panel" class="keyboard-layout-panel">
+            <div class="panel-header">
+                <h2>键盘布局</h2>
+                <div class="toggle-container">
+                    <label class="switch">
+                        <input type="checkbox" id="show-keyboard">
+                        <span class="slider round"></span>
+                    </label>
+                    <span>显示键盘</span>
+                </div>
+            </div>
+            <div class="keyboard-layout-container">
+                <div class="keyboard-layout" id="keyboard-layout">
+                    <!-- 键盘布局将由JavaScript动态生成 -->
+                </div>
+                <div class="finger-guide">
+                    <h3>指法指南</h3>
+                    <p>绿色：左手小指 | 青色：左手无名指 | 蓝色：左手中指 | 紫色：左手食指 | 红色：左/右手拇指</p>
+                    <p>橙色：右手食指 | 黄色：右手中指 | 棕色：右手无名指 | 灰色：右手小指</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 统计面板移到键盘布局下方 -->
+        <div class="stats-panel">
+            <div class="stat-card">
+                <div class="stat-value" id="wpm">0</div>
+                <div class="stat-label">WPM (每分钟单词数)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="accuracy">0%</div>
+                <div class="stat-label">字母准确度</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="errors">0</div>
+                <div class="stat-label">错误次数</div>
+            </div>
+            <div class="stat-card combo-card">
+                <div class="stat-value" id="combo">0</div>
+                <div class="stat-label">连击数</div>
+            </div>
+        </div>
+
+        <!-- 统计面板移到键盘布局下方 -->
+        <section class="stats-chart-panel">
+            <div class="chart-title">
+                <h2>进步趋势</h2>
+                <select id="chart-type-select">
+                    <option value="wpm">WPM 趋势</option>
+                    <option value="accuracy">准确率趋势</option>
+                    <option value="combo">最大连击趋势</option>
+                </select>
+            </div>
+            <div class="chart-container">
+                <canvas id="progress-chart" width="600" height="300"></canvas>
+            </div>
+        </section>
+
+        <section class="history-panel">
+            <div class="history-title">
+                <h2>历史记录</h2>
+                <button class="clear-history-btn" id="clear-history-btn">清空历史</button>
+            </div>
+            <div class="history-list" id="history-list">
+                <p class="placeholder">暂无历史记录</p>
+            </div>
+        </section>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
